@@ -1,0 +1,102 @@
+---
+title: "Proposal: FdSc Data Analytics"
+author: "Michael Hunt, Science and Natural Environment, Cornwall College"
+logo: CCCaLogo.png
+date: "18 September 2015"
+output: 
+  html_document:
+    includes:
+    in_header: CCCaLogo.png
+---
+
+
+## Summary
+
+An FdSc in Data Science is proposed, to be run by the Cornwall College Group (TCCG) and to start in September 2017. The purpose of this document is to initiate a dialogue between TCCG and other interested parties as part of a constructive development process.
+
+Those interested parties are envisaged to be:
+
+* Plymouth University - proposed validating institution and provider of main potential progression route
+* Other HE institutions - as providers of other potential progression route opportunities
+* Employers
+
+This document is directed at relevant academic staff at Plymouth University.
+
+At this very early stage, a lot of exploratory work remains to be done, and this communication is part of that. What we would like is an initial reaction from interested parties, particularly regarding the following issues:
+
+* Can you envisage supporting the development of an FdSc Data Science at Cornwall College?
+* What do you think of the proposed course outline, given below?
+* Are there significant omissions, or inclusions that should be omitted?
+* Can you envisage there being a progression route to the BSc Data Modelling and Analytics, following a process of development, or do you see this, even at this stage, as being very unlikely?
+
+## Possible titles:  
+
+* Data Science
+* Data Modelling
+* Data Analytics
+
+## Proposed Structure
+
+### Stage One
+
+* Professional Development
+    + This is a requirement for all TCCG foundation degree courses.
+* Essential Tools
+    + Spreadsheets
+    + R programming
+    + Python
+    + Version control
+* Statistical Inference
+    + Probability inc. conditional probability
+    + Distributions and asymptotics
+    + Hypothesis testing
+    + Confidence intervals
+    + Power
+* Regression Models
+    + Linear regression
+    + Logistic regression and glm
+    + Dummy variables
+    + Knot points
+* Reproducible Research Methods
+    + The problem of reproducibility
+    + Getting data from a variety of sources
+    + Cleaning and tidying data
+    + The research pipeline
+    + Use of R Markdown and knitr
+    + Reactive data products such as Shiny
+* Visualisation of data
+    + Exploratory Data Analysis
+    + ggplots
+    + Textual analysis
+    + Clustering
+
+### Stage Two
+
+* Machine Learning
+    + The bias-variance trade-off
+    + Classification problems
+    + Trees
+    + Random Forests
+    + Boost
+* Business Analytics
+    + Optimisation
+    + Forecasting
+    + Market segmentation - clustering
+* Spatial Analytics
+    + GIS in R
+    + Problems in public health
+    + Problems in local government
+    + Problems in ecology
+    = Problems in HR
+* Science Analytics
+    + Problems in Medicine
+    + Problems in Genomics
+    + Problems in physical science
+* Big Data
+    + The motivation
+    + The Apache Hadoop stack
+    + Big data analytics
+    + Machine learning with big data
+* Research Project
+    + Kaggle competition
+    + Devise own data product with employer involvement.
