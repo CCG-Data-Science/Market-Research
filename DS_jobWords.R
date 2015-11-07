@@ -37,7 +37,7 @@ dtm
 ncol(dtm)
 
 #2.2 Remove sparse terms
-spdtm= removeSparseTerms(dtm, .999)
+spdtm= removeSparseTerms(dtm, .99)
 ncol(spdtm)
 
 # 2.3 Create data frame
@@ -52,4 +52,4 @@ Absums<-data.frame(names,sums)
 arrange(Absums,-sums)[1:50,]
 
 # achieves the same in one line of code!
-which.max(colSums(emailsSparse))
+which.max(colSums(txtSparse))
