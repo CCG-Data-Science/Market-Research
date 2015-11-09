@@ -73,45 +73,42 @@ def skills_info(city = None, state = None):
     a data scientist. 
     '''
 
-    final_job = 'data+analyst' # searching for data scientist exact fit("data scientist" on Indeed search)
+    final_job = 'data' # searching for data scientist exact fit("data scientist" on Indeed search)
 
-    # Make sure the city specified works properly if it has more than one word (such as San Francisco)
-    if city is not None:
-        final_city = city.split() 
-        final_city = '+'.join(word for word in final_city)
-        final_site_list = ['http://www.indeed.co.uk/jobs?q=%22', final_job, '%22&l=', final_city,
-                    '%2C+', state] # Join all of our strings together so that indeed will search correctly
-    else:
-        final_site_list = ['http://www.indeed.co.uk/jobs?q="', final_job, '"']
-
-    final_site = ''.join(final_site_list) # Merge the html address together into one string
+    final_site="view-source:https://www.jobs.nhs.uk/xi/search_vacancy/1fd7b53385e37ae8b065fe56b3897b6a/"
     
-    base_url = 'http://www.indeed.co.uk'
+    base_url= "www.jobs.nhs.uk/xi/vacancy/1b6793a3773e19b5a29ac37a0cc8eea8/?vac_ref"
 
     try:
         html = urllib2.urlopen(final_site).read() # Open up the front page of our search first
+        
     except:
         'That city/state combination did not have any jobs. Exiting . . .' # In case the city is invalid
         return
     soup = BeautifulSoup(html) # Get the html from the first page
-
+    return soup
     # Now find out how many jobs there were
 
-    num_jobs_area = soup.find(id = 'searchCount').string.encode('utf-8') # Now extract the total number of jobs found
-    
-    job_numbers = re.findall('\d+', num_jobs_area) # Extract the total jobs found from the search result
-
-    
-    if len(job_numbers) > 3: # Have a total number of jobs greater than 1000
-        total_num_jobs = (int(job_numbers[2])*1000) + int(job_numbers[3])
-    else:
-        total_num_jobs = int(job_numbers[2]) 
-    
-    city_title = city
-    if city is None:
-        city_title = 'Nationwide'
-
-    print 'There were', total_num_jobs, 'jobs found,', city_title # Display how many jobs were found
+    num_jobs_area = soup.find('jobCount')#.string.encode('utf-8') # Now extract the total number of jobs found
+    print soup.find('span', attrs={'class':'jobCount'}).string.encode('utf-8')
+    soup.find('span', attrs={'class':'jobCount'}).text =num_jobs_area
+    return num_jobs_area
+    print  type(num_jobs_area)
+#    return
+#    job_numbers = re.findall('\d+', num_jobs_area) # Extract the total jobs found from the search result
+#    
+#    return job_numbers
+#    
+#    if len(job_numbers) > 3: # Have a total number of jobs greater than 1000
+#        total_num_jobs = (int(job_numbers[2])*1000) + int(job_numbers[3])
+#    else:
+#        total_num_jobs = int(job_numbers[2]) 
+#    
+#    city_title = city
+#    if city is None:
+#        city_title = 'Nationwide'
+    total_num_jobs=741
+    print 'There were', total_num_jobs, 'jobs found,'#, city_title # Display how many jobs were found
 
     num_pages = total_num_jobs/10 # This will be how we know the number of times we need to iterate over each new
                                       # search result page
@@ -124,12 +121,13 @@ def skills_info(city = None, state = None):
         # Now that we can view the correct 10 job returns, start collecting the text samples from each
 
         html_page = urllib2.urlopen(current_page).read() # Get the page
-
+        #return html_page
         page_obj = BeautifulSoup(html_page) # Locate all of the job links
-        job_link_area = page_obj.find(id = 'resultsCol') # The center column on the page where the job postings exist
-
-        job_URLS = [base_url + link.get('href') for link in job_link_area.find_all('a')] # Get the URLS for the jobs
-
+        #return page_obj
+        job_link_area = page_obj#.find(class = 'resultsContents panel') # The center column on the page where the job postings exist
+        return job_link_area.find_all('a')
+        job_URLS = [base_url + link.get('href') for link in page_obj.find_all('a')] # job_link_area.find_all('a')] # Get the URLS for the jobs
+        return job_URLS
         job_URLS = filter(lambda x:'clk' in x, job_URLS) # Now get just the job related URLS
 
         for j in xrange(0,len(job_URLS)):
