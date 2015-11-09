@@ -73,7 +73,7 @@ def skills_info(city = None, state = None):
     a data scientist. 
     '''
 
-    final_job = 'data+analyst' # searching for data scientist exact fit("data scientist" on Indeed search)
+    final_job = 'scientist' # searching for data scientist exact fit("data scientist" on Indeed search)
 
     # Make sure the city specified works properly if it has more than one word (such as San Francisco)
     if city is not None:
@@ -149,7 +149,13 @@ def skills_info(city = None, state = None):
 
     # Obtain our key terms and store them in a dict. These are the key data science skills we are looking for
 
-#    quals_dict=Counter({'PhD':doc_frequency['phd'],'BSc':doc_frequency['bsc'],'Experience':doc_frequency['experience']})
+    quals_dict=Counter({'PhD':doc_frequency['phd','dphil','doctorate'],'Experience':doc_frequency['experience'],
+                        'Degree':doc_frequency['degree','bsc'],'Masters':doc_frequency['master','msc'],'A levels':doc_frequency['a level'],
+                         'HND':doc_frequency['hnd']})
+    
+    science_dict=Counter({'Biology':doc_frequency['biology','biologist'],
+                          'Chemistry':doc_frequency['chemistry','chemist'],
+                          'Physics':doc_frequency['physics','physicist'],})
     
     prog_lang_dict = Counter({'R':doc_frequency['r'], 'Python':doc_frequency['python'],
                     'Java':doc_frequency['java'], 'C++':doc_frequency['c++'],
@@ -172,9 +178,9 @@ def skills_info(city = None, state = None):
                     'MongoDB':doc_frequency['mongodb']})
 
 
-    overall_total_attributes = prog_lang_dict + analysis_tool_dict + hadoop_dict + database_dict # Combine our Counter objects
-#    overall_total_attributes = quals_dict
-
+    #overall_total_attributes = prog_lang_dict + analysis_tool_dict + hadoop_dict + database_dict # Combine our Counter objects
+    overall_total_attributes = quals_dict
+    #overall_total_attributes = science_dict
 
     final_frame = pd.DataFrame(overall_total_attributes.items(), columns = ['Term', 'NumPostings']) # Convert these terms to a 
                                                                                                 # dataframe 
