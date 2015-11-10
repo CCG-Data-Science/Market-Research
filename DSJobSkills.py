@@ -57,7 +57,7 @@ def text_cleaner(website):
     
 # sample = text_cleaner("http://uk.dice.com/?Mode=AdvertView&AdvertId=9670458&utm_source=Feed&utm_medium=Aggregator_RX&utm_campaign=Indeed_UK_jobs&rx_job=51720716&rx_source=Indeed&rx_campaign=Indeed15&rx_group=1191&rx_medium=cpc")
 
-def skills_info(city = None, state = None):
+def skills_info(job="data+scientist",city = None, region = None):
     '''
     This function will take a desired city/state and look for all new job postings
     on Indeed.com. It will crawl all of the job postings and keep track of how many
@@ -73,19 +73,20 @@ def skills_info(city = None, state = None):
     a data scientist. 
     '''
 
-    final_job = 'scientist' # searching for data scientist exact fit("data scientist" on Indeed search)
+    final_job = job#'HND+and+science' # searching for data scientist exact fit("data scientist" on Indeed search)
 
     # Make sure the city specified works properly if it has more than one word (such as San Francisco)
     if city is not None:
         final_city = city.split() 
         final_city = '+'.join(word for word in final_city)
-        final_site_list = ['http://www.indeed.co.uk/jobs?q=%22', final_job, '%22&l=', final_city,
-                    '%2C+', state] # Join all of our strings together so that indeed will search correctly
+        final_site_list = ['http://www.indeed.co.uk/jobs?q=', final_job, '&l=', final_city]#,
+#                    '%2C+', region] # Join all of our strings together so that indeed will search correctly
+        #return final_site_list
     else:
-        final_site_list = ['http://www.indeed.co.uk/jobs?q="', final_job, '"']
+        final_site_list = ['http://www.indeed.co.uk/jobs?q=', final_job]
 
     final_site = ''.join(final_site_list) # Merge the html address together into one string
-    
+    #return final_site
     base_url = 'http://www.indeed.co.uk'
 
     try:
@@ -94,7 +95,7 @@ def skills_info(city = None, state = None):
         'That city/state combination did not have any jobs. Exiting . . .' # In case the city is invalid
         return
     soup = BeautifulSoup(html) # Get the html from the first page
-
+    # return soup
     # Now find out how many jobs there were
 
     num_jobs_area = soup.find(id = 'searchCount').string.encode('utf-8') # Now extract the total number of jobs found
@@ -117,14 +118,14 @@ def skills_info(city = None, state = None):
                                       # search result page
     job_descriptions = [] # Store all our descriptions in this list
 
-    for i in xrange(1,num_pages+1): # Loop through all of our search result pages
+    for i in xrange(1,num_pages+2): # Loop through all of our search result pages
         print 'Getting page', i
         start_num = str(i*10) # Assign the multiplier of 10 to view the pages we want
         current_page = ''.join([final_site, '&start=', start_num])
         # Now that we can view the correct 10 job returns, start collecting the text samples from each
 
         html_page = urllib2.urlopen(current_page).read() # Get the page
-
+        #return current_page
         page_obj = BeautifulSoup(html_page) # Locate all of the job links
         job_link_area = page_obj.find(id = 'resultsCol') # The center column on the page where the job postings exist
 
@@ -140,7 +141,7 @@ def skills_info(city = None, state = None):
 
     print 'Done with collecting the job postings!'    
     print 'There were', len(job_descriptions), 'jobs successfully found.'
-
+    #print job_descriptions[:]
 
     doc_frequency = Counter() # This will create a full counter of our terms. 
     [doc_frequency.update(item) for item in job_descriptions] # List comp
@@ -153,9 +154,18 @@ def skills_info(city = None, state = None):
                         'Degree':doc_frequency['degree','bsc'],'Masters':doc_frequency['master','msc'],'A levels':doc_frequency['a level'],
                          'HND':doc_frequency['hnd']})
     
-    science_dict=Counter({'Biology':doc_frequency['biology','biologist'],
-                          'Chemistry':doc_frequency['chemistry','chemist'],
-                          'Physics':doc_frequency['physics','physicist'],})
+    science_dict=Counter({'Biology':doc_frequency['biology']+doc_frequency['biologist']+doc_frequency['life sciences']+doc_frequency['biological'],
+                          'Biochemistry':doc_frequency['biochemistry'],
+                          'Chemistry':doc_frequency['chemistry']+doc_frequency['chemist']+doc_frequency['chemical'],
+                          'Physics':doc_frequency['physics']+doc_frequency['physicist']+doc_frequency['physical'],
+                          'Materials':doc_frequency['materials']+doc_frequency['composites']+doc_frequency['metal']+doc_frequency['metallurgical'],
+                          'Nuclear':doc_frequency['nuclear']})
+                          
+    sciJob_dict =Counter({'Analyst':doc_frequency['analyst'],
+                          'Laboratory':doc_frequency['laboratory'],
+                          'Technician':doc_frequency['technician']})                    
+    instrument_dict=Counter({'Microscope':doc_frequency['microscopes']+doc_frequency['microscopy'],
+                             'Spectrometer':doc_frequency['spectrometers']+doc_frequency['spectroscopy']})
     
     prog_lang_dict = Counter({'R':doc_frequency['r'], 'Python':doc_frequency['python'],
                     'Java':doc_frequency['java'], 'C++':doc_frequency['c++'],
@@ -165,7 +175,7 @@ def skills_info(city = None, state = None):
 
     analysis_tool_dict = Counter({'Excel':doc_frequency['excel'],  'Tableau':doc_frequency['tableau'],
                         'D3.js':doc_frequency['d3.js'], 'SAS':doc_frequency['sas'],
-                        'SPSS':doc_frequency['spss'], 'D3':doc_frequency['d3']})  
+                        'SPSS':doc_frequency['spss'], 'D3':doc_frequency['d3'],'Minitab':doc_frequency['minitab']})  
 
     hadoop_dict = Counter({'Hadoop':doc_frequency['hadoop'], 'MapReduce':doc_frequency['mapreduce'],
                 'Spark':doc_frequency['spark'], 'Pig':doc_frequency['pig'],
@@ -179,8 +189,8 @@ def skills_info(city = None, state = None):
 
 
     #overall_total_attributes = prog_lang_dict + analysis_tool_dict + hadoop_dict + database_dict # Combine our Counter objects
-    overall_total_attributes = quals_dict
-    #overall_total_attributes = science_dict
+    #overall_total_attributes = quals_dict
+    overall_total_attributes = science_dict+instrument_dict+sciJob_dict
 
     final_frame = pd.DataFrame(overall_total_attributes.items(), columns = ['Term', 'NumPostings']) # Convert these terms to a 
                                                                                                 # dataframe 
