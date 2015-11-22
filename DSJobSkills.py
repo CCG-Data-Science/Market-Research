@@ -188,9 +188,9 @@ def skills_info(job="data+scientist",city = None, region = None):
                     'MongoDB':doc_frequency['mongodb']})
 
 
-    #overall_total_attributes = prog_lang_dict + analysis_tool_dict + hadoop_dict + database_dict # Combine our Counter objects
+    overall_total_attributes = prog_lang_dict + analysis_tool_dict + hadoop_dict + database_dict # Combine our Counter objects
     #overall_total_attributes = quals_dict
-    overall_total_attributes = science_dict+instrument_dict+sciJob_dict
+    #overall_total_attributes = science_dict+instrument_dict+sciJob_dict
 
     final_frame = pd.DataFrame(overall_total_attributes.items(), columns = ['Term', 'NumPostings']) # Convert these terms to a 
                                                                                                 # dataframe 
