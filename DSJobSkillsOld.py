@@ -154,16 +154,17 @@ def skills_info(job="data+scientist",city = None, region = None):
                         'Degree':doc_frequency['degree','bsc'],'Masters':doc_frequency['master','msc'],'A levels':doc_frequency['a level'],
                          'HND':doc_frequency['hnd']})
     
-    science_dict=Counter({'Biology':doc_frequency['biology']+doc_frequency['biologist']+doc_frequency['life sciences']+doc_frequency['biological'],
+    science_dict=Counter({'Biology':doc_frequency['biology']+doc_frequency['biologist']+doc_frequency['life sciences']+doc_frequency['biological']+doc_frequency['biosciences'],
                           'Biochemistry':doc_frequency['biochemistry'],
-                          'Chemistry':doc_frequency['chemistry']+doc_frequency['chemist']+doc_frequency['chemical'],
+                          'Chemistry':doc_frequency['chemistry']+doc_frequency['chemist']+doc_frequency['chemical']+doc_frequency['polymer'],
                           'Physics':doc_frequency['physics']+doc_frequency['physicist']+doc_frequency['physical'],
                           'Materials':doc_frequency['materials']+doc_frequency['composites']+doc_frequency['metal']+doc_frequency['metallurgical'],
                           'Nuclear':doc_frequency['nuclear']})
                           
     sciJob_dict =Counter({'Analyst':doc_frequency['analyst'],
                           'Laboratory':doc_frequency['laboratory'],
-                          'Technician':doc_frequency['technician']})                    
+                          'Technician':doc_frequency['technician']})
+                          
     instrument_dict=Counter({'Microscope':doc_frequency['microscopes']+doc_frequency['microscopy'],
                              'Spectrometer':doc_frequency['spectrometers']+doc_frequency['spectroscopy']})
     
@@ -188,9 +189,9 @@ def skills_info(job="data+scientist",city = None, region = None):
                     'MongoDB':doc_frequency['mongodb']})
 
 
-    #overall_total_attributes = prog_lang_dict + analysis_tool_dict + hadoop_dict + database_dict # Combine our Counter objects
+    overall_total_attributes = prog_lang_dict + analysis_tool_dict + hadoop_dict + database_dict # Combine our Counter objects
     #overall_total_attributes = quals_dict
-    overall_total_attributes = science_dict+instrument_dict+sciJob_dict
+    #overall_total_attributes = science_dict+instrument_dict+sciJob_dict
 
     final_frame = pd.DataFrame(overall_total_attributes.items(), columns = ['Term', 'NumPostings']) # Convert these terms to a 
                                                                                                 # dataframe 
