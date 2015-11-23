@@ -1,21 +1,4 @@
-Skip to content
-This repository  
-Search
-Pull requests
-Issues
-Gist
- @mbh038
- Switch to new design
-Introducing a new repository design
-Hey there! We're rolling out a faster, more streamlined repository experience and would love to give you early access.
- Unwatch 1
-  Star 0
- Fork 0 CCG-Data-Science/Market-Research
- Branch: master  Market-Research/DSJobSkills.py
-fec54f7  2 hours ago
-@mbh038 mbh038 topics
-1 contributor
-RawBlameHistory     223 lines (169 sloc)  12.1 KB
+
 # -*- coding: utf-8 -*-
 """
 Created on Sat Nov 07 10:42:19 2015
@@ -186,7 +169,7 @@ def skills_info(job="data+scientist",city = None, region = None):
                     'Java':doc_frequency['java'], 'C++':doc_frequency['c++'],
                     'Ruby':doc_frequency['ruby'],
                     'Perl':doc_frequency['perl'], 'Matlab':doc_frequency['matlab'],
-                    'JavaScript':doc_frequency['javascript'], 'Scala': doc_frequency['scala']})
+                    'JavaScript':doc_frequency['javascript'], 'Scala': doc_frequency['scala'], 'GIS': doc_frequency['gis']})
 
     analysis_tool_dict = Counter({'Excel':doc_frequency['excel'],  'Tableau':doc_frequency['tableau'],
                         'D3.js':doc_frequency['d3.js'], 'SAS':doc_frequency['sas'],
@@ -236,5 +219,4 @@ def skills_info(job="data+scientist",city = None, region = None):
 
 
     return fig, final_frame # End of the function
-Status API Training Shop Blog About Pricing
-© 2015 GitHub, Inc. Terms Privacy Security Contact Help
+
