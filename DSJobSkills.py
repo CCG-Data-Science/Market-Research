@@ -150,9 +150,9 @@ def skills_info(job="data+scientist",city = None, region = None):
 
     # Obtain our key terms and store them in a dict. These are the key data science skills we are looking for
 
-    quals_dict=Counter({'PhD':doc_frequency['phd','dphil','doctorate'],'Experience':doc_frequency['experience'],
-                        'Degree':doc_frequency['degree','bsc'],'Masters':doc_frequency['master','msc'],'A levels':doc_frequency['a level'],
-                         'HND':doc_frequency['hnd']})
+    quals_dict=Counter({'PhD':doc_frequency['phd'] +doc_frequency['dphil']+doc_frequency['doctorate'],'Experience':doc_frequency['experience'],
+                        'Degree':doc_frequency['degree']+doc_frequency['bsc']+doc_frequency['bachelors'],'Masters':doc_frequency['masters']+doc_frequency['msc'],'A levels':doc_frequency['a level'],
+                         'HND':doc_frequency['hnd']+doc_frequency['foundation degree']})
     
     science_dict=Counter({'Biology':doc_frequency['biology']+doc_frequency['biologist']+doc_frequency['life sciences']+doc_frequency['biological'],
                           'Biochemistry':doc_frequency['biochemistry'],
@@ -186,11 +186,18 @@ def skills_info(job="data+scientist",city = None, region = None):
     database_dict = Counter({'SQL':doc_frequency['sql'], 'NoSQL':doc_frequency['nosql'],
                     'HBase':doc_frequency['hbase'], 'Cassandra':doc_frequency['cassandra'],
                     'MongoDB':doc_frequency['mongodb']})
+                    
+    ds_techniques_dict = Counter({'Machine learning':doc_frequency['machine learning']+doc_frequency['statistical learning'],'Inference':doc_frequency['inference'],
+                        'Regression':doc_frequency['regression'],'Visualisation':doc_frequency['visualisation'],
+                        'Exploratory data analysis':doc_frequency['exploratory data analysis'],'Classification':doc_frequency['classification']+doc_frequency['tree'],
+                        'Clusters':doc_frequency['cluster'],'Optimisation':doc_frequency['optimisation']+doc_frequency['optimization'],
+                         'Text':doc_frequency['text'],'Data Mining':doc_frequency['data mining']})
 
 
     overall_total_attributes = prog_lang_dict + analysis_tool_dict + hadoop_dict + database_dict # Combine our Counter objects
-    #overall_total_attributes = quals_dict
+   # overall_total_attributes = quals_dict
     #overall_total_attributes = science_dict+instrument_dict+sciJob_dict
+    #overall_total_attributes = ds_techniques_dict
 
     final_frame = pd.DataFrame(overall_total_attributes.items(), columns = ['Term', 'NumPostings']) # Convert these terms to a 
                                                                                                 # dataframe 

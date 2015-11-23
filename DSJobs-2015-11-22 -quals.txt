@@ -1,0 +1,16 @@
+ data + scientist ( 3300 jobs)
+ 4  Experience    84.785134
+ 2      Degree    41.986063
+ 5         PhD    26.074332
+ 0     Masters    18.524971
+ 1         HND     0.116144
+ 3    A levels     0.000000
+ 
+ 
+ data + analyst (11800 jobs)
+ 4  Experience    73.074647
+ 2      Degree    35.632767
+ 0     Masters     1.454054
+ 5         PhD     1.361062
+ 1         HND     0.008454
+ 3    A levels     0.000000)
