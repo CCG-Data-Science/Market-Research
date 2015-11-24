@@ -1,7 +1,7 @@
+
 # -*- coding: utf-8 -*-
 """
 Created on Sat Nov 07 10:42:19 2015
-
 @author: Mike
 """
 from bs4 import BeautifulSoup # For HTML parsing
@@ -63,12 +63,10 @@ def skills_info(job="data+scientist",city = None, region = None):
     on Indeed.com. It will crawl all of the job postings and keep track of how many
     use a preset list of typical data science skills. The final percentage for each skill
     is then displayed at the end of the collation. 
-
     Inputs: The location's city and state. These are optional. If no city/state is input, 
     the function will assume a national search (this can take a while!!!).
     Input the city/state as strings, such as skills_info('Chicago', 'IL').
     Use a two letter abbreviation for the state.
-
     Output: A bar chart showing the most commonly desired skills in the job market for 
     a data scientist. 
     '''
@@ -171,7 +169,7 @@ def skills_info(job="data+scientist",city = None, region = None):
                     'Java':doc_frequency['java'], 'C++':doc_frequency['c++'],
                     'Ruby':doc_frequency['ruby'],
                     'Perl':doc_frequency['perl'], 'Matlab':doc_frequency['matlab'],
-                    'JavaScript':doc_frequency['javascript'], 'Scala': doc_frequency['scala']})
+                    'JavaScript':doc_frequency['javascript'], 'Scala': doc_frequency['scala'], 'GIS': doc_frequency['gis']})
 
     analysis_tool_dict = Counter({'Excel':doc_frequency['excel'],  'Tableau':doc_frequency['tableau'],
                         'D3.js':doc_frequency['d3.js'], 'SAS':doc_frequency['sas'],
@@ -191,7 +189,7 @@ def skills_info(job="data+scientist",city = None, region = None):
                         'Regression':doc_frequency['regression'],'Visualisation':doc_frequency['visualisation'],
                         'Exploratory data analysis':doc_frequency['exploratory data analysis'],'Classification':doc_frequency['classification']+doc_frequency['tree'],
                         'Clusters':doc_frequency['cluster'],'Optimisation':doc_frequency['optimisation']+doc_frequency['optimization'],
-                         'Text':doc_frequency['text'],'Data Mining':doc_frequency['data mining']})
+                         'Text':doc_frequency['text'],'Data Mining':doc_frequency['data mining'],'Spatial':doc_frequency['gis']})
 
 
     overall_total_attributes = prog_lang_dict + analysis_tool_dict + hadoop_dict + database_dict # Combine our Counter objects
@@ -221,3 +219,4 @@ def skills_info(job="data+scientist",city = None, region = None):
 
 
     return fig, final_frame # End of the function
+
