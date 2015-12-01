@@ -86,7 +86,7 @@ def skills_info(job="data+scientist",city = None, region = None):
     final_site = ''.join(final_site_list) # Merge the html address together into one string
     #return final_site
     base_url = 'http://www.environmentjobs.co.uk/'
-
+#   http://www.environmentjobs.co.uk/green-jobs/senior-campaigner.55762.htm
     try:
         html = urllib2.urlopen(final_site).read() # Open up the front page of our search first
     except:
@@ -96,23 +96,23 @@ def skills_info(job="data+scientist",city = None, region = None):
     # return soup
     # Now find out how many jobs there were
 
-    num_jobs_area = soup.find(id = 'searchCount').string.encode('utf-8') # Now extract the total number of jobs found
-    
-    job_numbers = re.findall('\d+', num_jobs_area) # Extract the total jobs found from the search result
-
-    
-    if len(job_numbers) > 3: # Have a total number of jobs greater than 1000
-        total_num_jobs = (int(job_numbers[2])*1000) + int(job_numbers[3])
-    else:
-        total_num_jobs = int(job_numbers[2]) 
-    
+#    num_jobs_area = soup.find(id = 'searchCount').string.encode('utf-8') # Now extract the total number of jobs found
+#    
+#    job_numbers = re.findall('\d+', num_jobs_area) # Extract the total jobs found from the search result
+#
+#    
+#    if len(job_numbers) > 3: # Have a total number of jobs greater than 1000
+#        total_num_jobs = (int(job_numbers[2])*1000) + int(job_numbers[3])
+#    else:
+#        total_num_jobs = int(job_numbers[2]) 
+#    
     city_title = city
     if city is None:
         city_title = 'Nationwide'
+#
+#    print 'There were', total_num_jobs, 'jobs found,', city_title # Display how many jobs were found
 
-    print 'There were', total_num_jobs, 'jobs found,', city_title # Display how many jobs were found
-
-    num_pages = total_num_jobs/10 # This will be how we know the number of times we need to iterate over each new
+    num_pages = 1#total_num_jobs/10 # This will be how we know the number of times we need to iterate over each new
                                       # search result page
     job_descriptions = [] # Store all our descriptions in this list
 
@@ -125,12 +125,12 @@ def skills_info(job="data+scientist",city = None, region = None):
         html_page = urllib2.urlopen(current_page).read() # Get the page
         #return current_page
         page_obj = BeautifulSoup(html_page) # Locate all of the job links
-        job_link_area = page_obj.find(id = 'resultsCol') # The center column on the page where the job postings exist
+        job_link_area = page_obj.find(id = 'resultstable') # The center column on the page where the job postings exist
 
         job_URLS = [base_url + link.get('href') for link in job_link_area.find_all('a')] # Get the URLS for the jobs
-
+        print job_URLS
         job_URLS = filter(lambda x:'clk' in x, job_URLS) # Now get just the job related URLS
-
+        
         for j in xrange(0,len(job_URLS)):
             final_description = text_cleaner(job_URLS[j])
             if final_description: # So that we only append when the website was accessed correctly
@@ -217,7 +217,7 @@ def skills_info(job="data+scientist",city = None, region = None):
     # Get it ready for a bar plot
 
     final_plot = final_frame.plot(x = 'Term', kind = 'bar', legend = None, 
-                            title = 'Percentage of '+job+' Job Ads with a Key Skill, ' + city_title)
+                            title = 'Percentage of '+job+' Job Ads with a Key Skill, ')# + city_title)
 
     final_plot.set_ylabel('Percentage Appearing in Job Ads')
     fig = final_plot.get_figure() # Have to convert the pandas plot object to a matplotlib object
