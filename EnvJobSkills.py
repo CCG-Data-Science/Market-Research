@@ -57,7 +57,7 @@ def text_cleaner(website):
     
 # sample = text_cleaner("http://uk.dice.com/?Mode=AdvertView&AdvertId=9670458&utm_source=Feed&utm_medium=Aggregator_RX&utm_campaign=Indeed_UK_jobs&rx_job=51720716&rx_source=Indeed&rx_campaign=Indeed15&rx_group=1191&rx_medium=cpc")
 
-def skills_info(job="data+scientist",city = None, region = None):
+def skills_info(job="data+scientist",region = "UK"):
     '''
     This function will take a desired city/state and look for all new job postings
     on Indeed.com. It will crawl all of the job postings and keep track of how many
@@ -74,74 +74,136 @@ def skills_info(job="data+scientist",city = None, region = None):
     final_job = job#'HND+and+science' # searching for data scientist exact fit("data scientist" on Indeed search)
 
     # Make sure the city specified works properly if it has more than one word (such as San Francisco)
-    if city is not None:
-        final_city = city.split() 
-        final_city = '+'.join(word for word in final_city)
-        final_site_list = ['http://www.environmentjobs.co.uk/job_search/job_search_results.asp?adv=0&k=', final_job, '&l=', final_city]#,
-#                    '%2C+', region] # Join all of our strings together so that indeed will search correctly
-        #return final_site_list
+    if region is "UK":
+        final_site_list = ['http://www.environmentjobs.co.uk/job_search/job_search_results.asp?o=0&lt=job&k=', final_job]#,
     else:
-        final_site_list = ['http://www.environmentjobs.co.uk/job_search/job_search_results.asp?adv=0&k=', final_job]
+        final_site_list = ['http://www.environmentjobs.com/job_search/job_search_results.asp?o=0&lt=job&k=', final_job]
 
     final_site = ''.join(final_site_list) # Merge the html address together into one string
     #return final_site
-    base_url = 'http://www.environmentjobs.co.uk/'
-#   http://www.environmentjobs.co.uk/green-jobs/senior-campaigner.55762.htm
+    base_urls = ['http://www.environmentjobs.co.uk/','http://www.environmentjobs.com/']
+
     try:
         html = urllib2.urlopen(final_site).read() # Open up the front page of our search first
     except:
-        'That city/state combination did not have any jobs. Exiting . . .' # In case the city is invalid
+        'That region combination did not have any jobs. Exiting . . .' # In case the city is invalid
         return
-    soup = BeautifulSoup(html) # Get the html from the first page
-    # return soup
-    # Now find out how many jobs there were
+    
+    jobUrls=[]
+    nJobs =0
+    nPages=1
 
-#    num_jobs_area = soup.find(id = 'searchCount').string.encode('utf-8') # Now extract the total number of jobs found
-#    
-#    job_numbers = re.findall('\d+', num_jobs_area) # Extract the total jobs found from the search result
-#
-#    
-#    if len(job_numbers) > 3: # Have a total number of jobs greater than 1000
-#        total_num_jobs = (int(job_numbers[2])*1000) + int(job_numbers[3])
-#    else:
-#        total_num_jobs = int(job_numbers[2]) 
-#    
-    city_title = city
-    if city is None:
-        city_title = 'Nationwide'
-#
-#    print 'There were', total_num_jobs, 'jobs found,', city_title # Display how many jobs were found
+    while True:
+        urlStem=re.findall('(http\S+?o=)',final_site)
+        #print urlStem
+        urlEnd=re.findall('&lt\S+',final_site)
+        #print urlEnd
+        urlNextpage=urlStem[0]+str(15*(nPages-1))+urlEnd[0]
+        html = urllib2.urlopen(urlNextpage).read()
+        soup = BeautifulSoup(html)
+        jobs = soup.find_all("a","search-jobtitle")
+        for job in jobs:
+            nextUrl = str(re.findall('href="(\S+=[0-9]+)',str(job)))[2:-2]
+            #print nextUrl
+            jobUrls.append(nextUrl)
+        text = soup.get_text()
+        pages=re.findall("NEXT PAGE",text)
+        if len(pages)>0:
+            nPages+=1           
+        else:
+            break
+     
+    print "Found: "+ str(len(jobUrls)) +" jobs on "+str(nPages)+" pages"
+    #print jobUrls    
+    #return
 
-    num_pages = 1#total_num_jobs/10 # This will be how we know the number of times we need to iterate over each new
-                                      # search result page
     job_descriptions = [] # Store all our descriptions in this list
 
-    for i in xrange(1,num_pages+2): # Loop through all of our search result pages
-        print 'Getting page', i
-        start_num = str(i*10) # Assign the multiplier of 10 to view the pages we want
-        current_page = ''.join([final_site, '&start=', start_num])
-        # Now that we can view the correct 10 job returns, start collecting the text samples from each
-
-        html_page = urllib2.urlopen(current_page).read() # Get the page
-        #return current_page
-        page_obj = BeautifulSoup(html_page) # Locate all of the job links
-        job_link_area = page_obj.find(id = 'resultstable') # The center column on the page where the job postings exist
-
-        #job_URLS = [base_url + link.get('href') for link in job_link_area.find_all('a')] # Get the URLS for the jobs
+    for j in xrange(len(jobUrls)):
+        print 'Getting job', j+1
+        #print jobUrls[j]
+        baseURLIncluded=False
+        for url in base_urls:
+            if url in jobUrls[j]:
+                baseURLIncluded=True
         
-        job_URLS = [link.get('href') for link in job_link_area.find_all('a')] # Get the URLS for the jobs
-        print len(job_URLS)
-        job_URLS = filter(lambda x:'clk' in x, job_URLS) # Now get just the job related URLS
-        
-        for j in xrange(0,len(job_URLS)):
-            final_description = text_cleaner(job_URLS[j])
-            if final_description: # So that we only append when the website was accessed correctly
-                job_descriptions.append(final_description)
-            sleep(1) # So that we don't be jerks. If you have a very fast internet connection you could hit the server a lot! 
+        if baseURLIncluded == False:
+            jobUrls[j] = base_urls[0]+str(jobUrls[j])
+        #print jobUrls[j]
+        final_description = text_cleaner(jobUrls[j])
+        #print final_description
+        if final_description: # So that we only append when the website was accessed correctly
+            job_descriptions.append(final_description)
+        sleep(1)
+            
+##    text = soup.get_text()
+##    count = 0
+##    for line in :    
+##        print line
+##        line = line.rstrip()
+##        x = re.findall('search-jobtitle', line)
+##        if len(x)>0:
+##            count +=1
+##            
+##    
+##    num_jobs_area = count#soup.find(id = 'search-jobtitle').string.encode('utf-8') # Now extract the total number of jobs found
+##    print num_jobs_area
+##    return
+##    job_numbers = re.findall('\d+', num_jobs_area) # Extract the total jobs found from the search result
+##
+##    
+##    if len(job_numbers) > 3: # Have a total number of jobs greater than 1000
+##        total_num_jobs = (int(job_numbers[2])*1000) + int(job_numbers[3])
+##    else:
+##        total_num_jobs = int(job_numbers[2]) 
+##    
+#    city_title = city
+#    if city is None:
+#        city_title = 'Nationwide'
+##
+##    print 'There were', total_num_jobs, 'jobs found,', city_title # Display how many jobs were found
+#
+#    #num_pages = 1#total_num_jobs/10 # This will be how we know the number of times we need to iterate over each new
+#                                      # search result page
+#    job_descriptions = [] # Store all our descriptions in this list
+#
+#    for i in xrange(1,nPages): # Loop through all of our search result pages
+#        print 'Getting page', i
+#        start_num = str(i*10) # Assign the multiplier of 10 to view the pages we want
+#        current_page = ''.join([final_site, '&start=', start_num])
+#        # Now that we can view the correct 10 job returns, start collecting the text samples from each
+#
+#        html_page = urllib2.urlopen(current_page).read() # Get the page
+#        #return current_page
+#        page_obj = BeautifulSoup(html_page) # Locate all of the job links
+#        job_link_area = page_obj.find(id = 'resultstable') # The center column on the page where the job postings exist
+#
+#        #job_URLS = [base_url + link.get('href') for link in job_link_area.find_all('a')] # Get the URLS for the jobs
+#        
+#        #job_URLS = [link.get('href') for link in job_link_area.find_all('a')] # Get the URLS for the jobs
+#        job_URLS=urls        
+#        #print job_URLS
+#        #return len(job_URLS)
+#        for j in xrange(len(job_URLS)):
+#            baseURLIncluded=False
+#            for url in base_urls:
+#                if url in job_URLS[j]:
+#                    baseURLIncluded=True
+#            if baseURLIncluded == False:
+#                job_URLS[j] = base_urls[0]+str(job_URLS[j])
+#        #job_URLS = filter(lambda x:'clk' in x, job_URLS) # Now get just the job related URLS
+#        #print job_URLS
+#        for j in xrange(0,len(job_URLS)):
+#            print job_URLS[j]
+#            final_description = text_cleaner(job_URLS[j])
+#            #print final_description
+#            if final_description: # So that we only append when the website was accessed correctly
+#                job_descriptions.append(final_description)
+#            sleep(1) # So that we don't be jerks. If you have a very fast internet connection you could hit the server a lot! 
 
     print 'Done with collecting the job postings!'    
     print 'There were', len(job_descriptions), 'jobs successfully found.'
-    #print job_descriptions[:]
+   #print job_descriptions[:]
 
     doc_frequency = Counter() # This will create a full counter of our terms. 
     [doc_frequency.update(item) for item in job_descriptions] # List comp
@@ -219,7 +281,7 @@ def skills_info(job="data+scientist",city = None, region = None):
     # Get it ready for a bar plot
 
     final_plot = final_frame.plot(x = 'Term', kind = 'bar', legend = None, 
-                            title = 'Percentage of '+job+' Job Ads with a Key Skill, ')# + city_title)
+                            title = 'Percentage of Job Ads with a Key Skill')# + city_title)
 
     final_plot.set_ylabel('Percentage Appearing in Job Ads')
     fig = final_plot.get_figure() # Have to convert the pandas plot object to a matplotlib object
@@ -227,4 +289,4 @@ def skills_info(job="data+scientist",city = None, region = None):
 
     return fig, final_frame # End of the function
 
-s=skills_info("wildlife")
+s=skills_info("marine+science")
