@@ -127,8 +127,10 @@ def skills_info(job="data+scientist",city = None, region = None):
         page_obj = BeautifulSoup(html_page) # Locate all of the job links
         job_link_area = page_obj.find(id = 'resultstable') # The center column on the page where the job postings exist
 
-        job_URLS = [base_url + link.get('href') for link in job_link_area.find_all('a')] # Get the URLS for the jobs
-        print job_URLS
+        #job_URLS = [base_url + link.get('href') for link in job_link_area.find_all('a')] # Get the URLS for the jobs
+        
+        job_URLS = [link.get('href') for link in job_link_area.find_all('a')] # Get the URLS for the jobs
+        print len(job_URLS)
         job_URLS = filter(lambda x:'clk' in x, job_URLS) # Now get just the job related URLS
         
         for j in xrange(0,len(job_URLS)):
@@ -225,3 +227,4 @@ def skills_info(job="data+scientist",city = None, region = None):
 
     return fig, final_frame # End of the function
 
+s=skills_info("wildlife")
