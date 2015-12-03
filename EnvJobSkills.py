@@ -70,14 +70,11 @@ def skills_info(job="data+scientist",region = "UK"):
     Output: A bar chart showing the most commonly desired skills in the job market for 
     a data scientist. 
     '''
-
-    final_job = job#'HND+and+science' # searching for data scientist exact fit("data scientist" on Indeed search)
-
     # Make sure the city specified works properly if it has more than one word (such as San Francisco)
     if region is "UK":
-        final_site_list = ['http://www.environmentjobs.co.uk/job_search/job_search_results.asp?o=0&lt=job&k=', final_job]#,
+        final_site_list = ['http://www.environmentjobs.co.uk/job_search/job_search_results.asp?o=0&lt=job&k=',job]#,
     else:
-        final_site_list = ['http://www.environmentjobs.com/job_search/job_search_results.asp?o=0&lt=job&k=', final_job]
+        final_site_list = ['http://www.environmentjobs.com/job_search/job_search_results.asp?o=0&lt=job&k=',job]
 
     final_site = ''.join(final_site_list) # Merge the html address together into one string
     #return final_site
@@ -102,8 +99,8 @@ def skills_info(job="data+scientist",region = "UK"):
         html = urllib2.urlopen(urlNextpage).read()
         soup = BeautifulSoup(html)
         jobs = soup.find_all("a","search-jobtitle")
-        for job in jobs:
-            nextUrl = str(re.findall('href="(\S+=[0-9]+)',str(job)))[2:-2]
+        for jobUrl in jobs:
+            nextUrl = str(re.findall('href="(\S+=[0-9]+)',str(jobUrl)))[2:-2]
             #print nextUrl
             jobUrls.append(nextUrl)
         text = soup.get_text()
@@ -289,4 +286,4 @@ def skills_info(job="data+scientist",region = "UK"):
 
     return fig, final_frame # End of the function
 
-s=skills_info("marine+science")
+s=skills_info("marine")
