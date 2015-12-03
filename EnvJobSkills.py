@@ -136,70 +136,6 @@ def skills_info(job="data+scientist",region = "UK"):
             job_descriptions.append(final_description)
         sleep(1)
             
-##    text = soup.get_text()
-##    count = 0
-##    for line in :    
-##        print line
-##        line = line.rstrip()
-##        x = re.findall('search-jobtitle', line)
-##        if len(x)>0:
-##            count +=1
-##            
-##    
-##    num_jobs_area = count#soup.find(id = 'search-jobtitle').string.encode('utf-8') # Now extract the total number of jobs found
-##    print num_jobs_area
-##    return
-##    job_numbers = re.findall('\d+', num_jobs_area) # Extract the total jobs found from the search result
-##
-##    
-##    if len(job_numbers) > 3: # Have a total number of jobs greater than 1000
-##        total_num_jobs = (int(job_numbers[2])*1000) + int(job_numbers[3])
-##    else:
-##        total_num_jobs = int(job_numbers[2]) 
-##    
-#    city_title = city
-#    if city is None:
-#        city_title = 'Nationwide'
-##
-##    print 'There were', total_num_jobs, 'jobs found,', city_title # Display how many jobs were found
-#
-#    #num_pages = 1#total_num_jobs/10 # This will be how we know the number of times we need to iterate over each new
-#                                      # search result page
-#    job_descriptions = [] # Store all our descriptions in this list
-#
-#    for i in xrange(1,nPages): # Loop through all of our search result pages
-#        print 'Getting page', i
-#        start_num = str(i*10) # Assign the multiplier of 10 to view the pages we want
-#        current_page = ''.join([final_site, '&start=', start_num])
-#        # Now that we can view the correct 10 job returns, start collecting the text samples from each
-#
-#        html_page = urllib2.urlopen(current_page).read() # Get the page
-#        #return current_page
-#        page_obj = BeautifulSoup(html_page) # Locate all of the job links
-#        job_link_area = page_obj.find(id = 'resultstable') # The center column on the page where the job postings exist
-#
-#        #job_URLS = [base_url + link.get('href') for link in job_link_area.find_all('a')] # Get the URLS for the jobs
-#        
-#        #job_URLS = [link.get('href') for link in job_link_area.find_all('a')] # Get the URLS for the jobs
-#        job_URLS=urls        
-#        #print job_URLS
-#        #return len(job_URLS)
-#        for j in xrange(len(job_URLS)):
-#            baseURLIncluded=False
-#            for url in base_urls:
-#                if url in job_URLS[j]:
-#                    baseURLIncluded=True
-#            if baseURLIncluded == False:
-#                job_URLS[j] = base_urls[0]+str(job_URLS[j])
-#        #job_URLS = filter(lambda x:'clk' in x, job_URLS) # Now get just the job related URLS
-#        #print job_URLS
-#        for j in xrange(0,len(job_URLS)):
-#            print job_URLS[j]
-#            final_description = text_cleaner(job_URLS[j])
-#            #print final_description
-#            if final_description: # So that we only append when the website was accessed correctly
-#                job_descriptions.append(final_description)
-#            sleep(1) # So that we don't be jerks. If you have a very fast internet connection you could hit the server a lot! 
 
     print 'Done with collecting the job postings!'    
     print 'There were', len(job_descriptions), 'jobs successfully found.'
@@ -289,4 +225,4 @@ def skills_info(job="data+scientist",region = "UK"):
 
     return fig, final_frame # End of the function
 
-s=skills_info("marine+science")
+s=skills_info("marine+science","not UK")
