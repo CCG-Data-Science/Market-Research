@@ -10,6 +10,7 @@ import re # Regular expressions
 from time import sleep # To prevent overwhelming the server between connections
 from collections import Counter # Keep track of our term counts
 from nltk.corpus import stopwords # Filter out stopwords, such as 'the', 'or', 'and'
+from nltk.stem.snowball import SnowballStemmer
 import pandas as pd # For converting results to a dataframe and bar chart plots
 # matplotlib inline
 
@@ -146,7 +147,7 @@ def skills_info(job="data+scientist",region = "UK"):
     # Obtain our key terms and store them in a dict. These are the key data science skills we are looking for
 
     quals_dict=Counter({'PhD':doc_frequency['phd'] +doc_frequency['dphil']+doc_frequency['doctorate'],'Experience':doc_frequency['experience'],
-                        'Degree':doc_frequency['degree']+doc_frequency['bsc']+doc_frequency['bachelors'],'Masters':doc_frequency['masters']+doc_frequency['msc'],'A levels':doc_frequency['a level'],
+                        'Degree':doc_frequency['degree']+doc_frequency['graduate']+doc_frequency['bsc']+doc_frequency['bachelors'],'Masters':doc_frequency['masters']+doc_frequency['msc']+doc_frequency['postgraduate'],'A levels':doc_frequency['a level'],
                          'HND':doc_frequency['hnd']+doc_frequency['foundation degree']})
     
     science_dict=Counter({'Biology':doc_frequency['biology']+doc_frequency['biologist']+doc_frequency['life sciences']+doc_frequency['biological'],
@@ -222,3 +223,4 @@ def skills_info(job="data+scientist",region = "UK"):
 
     return fig, final_frame # End of the function
 
+a=skills_info("marine")
