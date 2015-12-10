@@ -133,7 +133,7 @@ def skills_info(job="data+scientist",city = None, region = None):
         job_URLS = filter(lambda x:'clk' in x, job_URLS) # Now get just the job related URLS
 
         for j in xrange(0,len(job_URLS)):
-            final_description = text_cleaner(job_URLS[j])
+            final_description = text_cleaner(job_URLS[j])            
             if final_description: # So that we only append when the website was accessed correctly
                 job_descriptions.append(final_description)
             sleep(1) # Try to avoid overloading the server! 
@@ -141,59 +141,73 @@ def skills_info(job="data+scientist",city = None, region = None):
     print 'Done with collecting the job postings!'    
     print 'There were', len(job_descriptions), 'jobs successfully found.'
     #print job_descriptions[:]
-
+    
+    for item in job_descriptions:
+        print len(item)
     doc_frequency = Counter() # This will create a full counter of our terms. 
     [doc_frequency.update(item) for item in job_descriptions] # List comp
-
+    print len (doc_frequency)
+    print doc_frequency
     # Now we can just look at our final dict list inside doc_frequency
 
     # Obtain our key terms and store them in a dict. These are the key data science skills we are looking for
 
-    quals_dict=Counter({'PhD':doc_frequency['phd'] +doc_frequency['dphil']+doc_frequency['doctorate'],'Experience':doc_frequency['experience'],
-                        'Degree':doc_frequency['degree']+doc_frequency['bsc']+doc_frequency['bachelors'],'Masters':doc_frequency['masters']+doc_frequency['msc'],'A levels':doc_frequency['a level'],
-                         'HND':doc_frequency['hnd']+doc_frequency['foundation degree']})
+#    quals_dict=Counter({'PhD':doc_frequency['phd'] +doc_frequency['dphil']+doc_frequency['doctorate'],'Experience':doc_frequency['experience'],
+#                        'Degree':doc_frequency['degree']+doc_frequency['bsc']+doc_frequency['bachelors'],'Masters':doc_frequency['masters']+doc_frequency['msc'],'A levels':doc_frequency['a level'],
+#                         'HND':doc_frequency['hnd']+doc_frequency['foundation degree']})
+#    
+#    science_dict=Counter({'Biology':doc_frequency['biology']+doc_frequency['biologist']+doc_frequency['life sciences']+doc_frequency['biological'],
+#                          'Biochemistry':doc_frequency['biochemistry'],
+#                          'Chemistry':doc_frequency['chemistry']+doc_frequency['chemist']+doc_frequency['chemical'],
+#                          'Physics':doc_frequency['physics']+doc_frequency['physicist']+doc_frequency['physical'],
+#                          'Materials':doc_frequency['materials']+doc_frequency['composites']+doc_frequency['metal']+doc_frequency['metallurgical'],
+#                          'Nuclear':doc_frequency['nuclear']})
+#                          
+#    sciJob_dict =Counter({'Analyst':doc_frequency['analyst'],
+#                          'Laboratory':doc_frequency['laboratory'],
+#                          'Technician':doc_frequency['technician']})                    
+#    instrument_dict=Counter({'Microscope':doc_frequency['microscopes']+doc_frequency['microscopy'],
+#                             'Spectrometer':doc_frequency['spectrometers']+doc_frequency['spectroscopy']})
+#    
+#    prog_lang_dict = Counter({'R':doc_frequency['r'], 'Python':doc_frequency['python'],
+#                    'Java':doc_frequency['java'], 'C++':doc_frequency['c++'],
+#                    'Ruby':doc_frequency['ruby'],
+#                    'Perl':doc_frequency['perl'], 'Matlab':doc_frequency['matlab'],
+#                    'JavaScript':doc_frequency['javascript'], 'Scala': doc_frequency['scala'], 'GIS': doc_frequency['gis']})
+#
+#    analysis_tool_dict = Counter({'Excel':doc_frequency['excel'],  'Tableau':doc_frequency['tableau'],
+#                        'D3.js':doc_frequency['d3.js'], 'SAS':doc_frequency['sas'],
+#                        'SPSS':doc_frequency['spss'], 'D3':doc_frequency['d3'],'Minitab':doc_frequency['minitab']})  
+#
+#    hadoop_dict = Counter({'Hadoop':doc_frequency['hadoop'], 'MapReduce':doc_frequency['mapreduce'],
+#                'Spark':doc_frequency['spark'], 'Pig':doc_frequency['pig'],
+#                'Hive':doc_frequency['hive'], 'Shark':doc_frequency['shark'],
+#                'Oozie':doc_frequency['oozie'], 'ZooKeeper':doc_frequency['zookeeper'],
+#                'Flume':doc_frequency['flume'], 'Mahout':doc_frequency['mahout']})
+#
+#    database_dict = Counter({'SQL':doc_frequency['sql'], 'NoSQL':doc_frequency['nosql'],
+#                    'HBase':doc_frequency['hbase'], 'Cassandra':doc_frequency['cassandra'],
+#                    'MongoDB':doc_frequency['mongodb']})
+#                    
+#    ds_techniques_dict = Counter({'Machine learning':doc_frequency['machine learning']+doc_frequency['statistical learning'],'Inference':doc_frequency['inference'],
+#                        'Regression':doc_frequency['regression'],'Visualisation':doc_frequency['visualisation'],
+#                        'Exploratory data analysis':doc_frequency['exploratory data analysis'],'Classification':doc_frequency['classification']+doc_frequency['tree'],
+#                        'Clusters':doc_frequency['cluster'],'Optimisation':doc_frequency['optimisation']+doc_frequency['optimization'],
+#                         'Text':doc_frequency['text'],'Data Mining':doc_frequency['data mining'],'Spatial':doc_frequency['gis']})
+
+    re_skills_dict = Counter({'CAD':doc_frequency['CAD'],'GIS':doc_frequency['GIS'],'Spreadsheet':doc_frequency['spreadsheet']+doc_frequency['Excel'],
+                              'Matlab':doc_frequency['matlab'],'Team':doc_frequency['team'],'Finance':doc_frequency['business']+doc_frequency['finance']+doc_frequency['grant'],
+                              'Project Management':doc_frequency['project management']+doc_frequency['prince'],
+                               'Systems':doc_frequency['system']})
     
-    science_dict=Counter({'Biology':doc_frequency['biology']+doc_frequency['biologist']+doc_frequency['life sciences']+doc_frequency['biological'],
-                          'Biochemistry':doc_frequency['biochemistry'],
-                          'Chemistry':doc_frequency['chemistry']+doc_frequency['chemist']+doc_frequency['chemical'],
-                          'Physics':doc_frequency['physics']+doc_frequency['physicist']+doc_frequency['physical'],
-                          'Materials':doc_frequency['materials']+doc_frequency['composites']+doc_frequency['metal']+doc_frequency['metallurgical'],
-                          'Nuclear':doc_frequency['nuclear']})
-                          
-    sciJob_dict =Counter({'Analyst':doc_frequency['analyst'],
-                          'Laboratory':doc_frequency['laboratory'],
-                          'Technician':doc_frequency['technician']})                    
-    instrument_dict=Counter({'Microscope':doc_frequency['microscopes']+doc_frequency['microscopy'],
-                             'Spectrometer':doc_frequency['spectrometers']+doc_frequency['spectroscopy']})
-    
-    prog_lang_dict = Counter({'R':doc_frequency['r'], 'Python':doc_frequency['python'],
-                    'Java':doc_frequency['java'], 'C++':doc_frequency['c++'],
-                    'Ruby':doc_frequency['ruby'],
-                    'Perl':doc_frequency['perl'], 'Matlab':doc_frequency['matlab'],
-                    'JavaScript':doc_frequency['javascript'], 'Scala': doc_frequency['scala'], 'GIS': doc_frequency['gis']})
-
-    analysis_tool_dict = Counter({'Excel':doc_frequency['excel'],  'Tableau':doc_frequency['tableau'],
-                        'D3.js':doc_frequency['d3.js'], 'SAS':doc_frequency['sas'],
-                        'SPSS':doc_frequency['spss'], 'D3':doc_frequency['d3'],'Minitab':doc_frequency['minitab']})  
-
-    hadoop_dict = Counter({'Hadoop':doc_frequency['hadoop'], 'MapReduce':doc_frequency['mapreduce'],
-                'Spark':doc_frequency['spark'], 'Pig':doc_frequency['pig'],
-                'Hive':doc_frequency['hive'], 'Shark':doc_frequency['shark'],
-                'Oozie':doc_frequency['oozie'], 'ZooKeeper':doc_frequency['zookeeper'],
-                'Flume':doc_frequency['flume'], 'Mahout':doc_frequency['mahout']})
-
-    database_dict = Counter({'SQL':doc_frequency['sql'], 'NoSQL':doc_frequency['nosql'],
-                    'HBase':doc_frequency['hbase'], 'Cassandra':doc_frequency['cassandra'],
-                    'MongoDB':doc_frequency['mongodb']})
-                    
-    ds_techniques_dict = Counter({'Machine learning':doc_frequency['machine learning']+doc_frequency['statistical learning'],'Inference':doc_frequency['inference'],
-                        'Regression':doc_frequency['regression'],'Visualisation':doc_frequency['visualisation'],
-                        'Exploratory data analysis':doc_frequency['exploratory data analysis'],'Classification':doc_frequency['classification']+doc_frequency['tree'],
-                        'Clusters':doc_frequency['cluster'],'Optimisation':doc_frequency['optimisation']+doc_frequency['optimization'],
-                         'Text':doc_frequency['text'],'Data Mining':doc_frequency['data mining'],'Spatial':doc_frequency['gis']})
-
-
-    overall_total_attributes = prog_lang_dict + analysis_tool_dict + hadoop_dict + database_dict # Combine our Counter objects
+    re_tech_dict = Counter({'Solar':doc_frequency['solar'],'Wind':doc_frequency['wind'],'Biomass':doc_frequency['biomass'],'Smart grid':doc_frequency['smart'],
+                            'Marine':doc_frequency['marine']+doc_frequency['tidal'],
+                             'Heat':doc_frequency['heat']+doc_frequency['network'],'LCA':doc_frequency['lca']+doc_frequency['life cycle analysis'],
+                              'Carbon': doc_frequency['carbon'],'Community': doc_frequency['community']
+                              })
+    #overall_total_attributes = prog_lang_dict + analysis_tool_dict + hadoop_dict + database_dict # Combine our Counter objects
+    print re_skills_dict    
+    overall_total_attributes = re_skills_dict+re_tech_dict
    # overall_total_attributes = quals_dict
     #overall_total_attributes = science_dict+instrument_dict+sciJob_dict
     #overall_total_attributes = ds_techniques_dict
@@ -212,12 +226,12 @@ def skills_info(job="data+scientist",city = None, region = None):
 
     # Get it ready for a bar plot
 
-    final_plot = final_frame.plot(x = 'Term', kind = 'bar', legend = None, 
-                            title = 'Percentage of Data Scientist Job Ads with a Key Skill, ' + city_title)
+    final_plot = final_frame.plot(x = 'Term', kind = 'bar', legend = None)
 
     final_plot.set_ylabel('Percentage Appearing in Job Ads')
     fig = final_plot.get_figure() # Have to convert the pandas plot object to a matplotlib object
-
+    print fig
+        #print final_frame
 
     return fig, final_frame # End of the function
 
